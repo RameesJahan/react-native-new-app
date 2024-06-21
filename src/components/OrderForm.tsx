@@ -11,6 +11,7 @@ import Styles from '../styles';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import RadioGroup from 'react-native-radio-buttons-group';
+import RNReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 type Props = {};
 
@@ -48,6 +49,12 @@ const OrderForm = (props: Props) => {
       value: 'upi',
     },
   ]),[])
+
+  const triggerHeptic = () => {
+    RNReactNativeHapticFeedback.trigger('impactMedium',{
+      ignoreAndroidSystemSettings: true,
+    });
+  };
 
   return (
     <View>
@@ -139,6 +146,7 @@ const OrderForm = (props: Props) => {
             />
             <Button
               onPress={() => {
+                triggerHeptic();
                 handleReset();
                 setVals(null);
                 setPayTypeId('1');

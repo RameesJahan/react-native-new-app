@@ -13,6 +13,7 @@
     "formik": "^2.4.6",
     "react": "18.2.0",
     "react-native": "0.74.2",
+    "react-native-haptic-feedback": "^2.2.0",
     "react-native-radio-buttons-group": "^3.1.0",
     "yup": "^1.4.0"
   },
