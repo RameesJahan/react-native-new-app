@@ -12,6 +12,9 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import RadioGroup from 'react-native-radio-buttons-group';
 import RNReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ParamList } from '../App';
 
 type Props = {};
 
@@ -34,8 +37,9 @@ const OrderSchema = Yup.object().shape({
 });
 
 const OrderForm = (props: Props) => {
-  const [vals, setVals] = useState<FormValues | null>(null);
   const [payTypeId, setPayTypeId] = useState('1');
+
+  const navigation = useNavigation<NativeStackNavigationProp<ParamList>>();
 
   const payData = useMemo(() => ([
     {
@@ -69,7 +73,7 @@ const OrderForm = (props: Props) => {
             payTypeId
           };
 
-          setVals(_nValues);
+          navigation.navigate('OrderData', _nValues);
         }}>
         {({
           values,
@@ -148,7 +152,6 @@ const OrderForm = (props: Props) => {
               onPress={() => {
                 triggerHeptic();
                 handleReset();
-                setVals(null);
                 setPayTypeId('1');
               }}
               title="Reset"
@@ -157,20 +160,7 @@ const OrderForm = (props: Props) => {
         )}
       </Formik>
 
-      <View>
-        <Text style={Styles.textH2}>Order Summary</Text>
-        {vals ? (
-          <>
-            <Text style={[styles.textData]}>Name: {vals.name}</Text>
-            <Text style={[styles.textData]}>Email: {vals.email}</Text>
-            <Text style={[styles.textData]}>Phone: {vals.phone}</Text>
-            <Text style={[styles.textData]}>Address: {vals.address}</Text>
-            <Text style={[styles.textData]}>Pay Type: {payData[Number(vals.payTypeId) - 1].label}</Text>
-          </>
-        ) : (
-          <Text style={styles.textNoData}>No Data!</Text>
-        )}
-      </View>
+      
     </View>
   );
 };
@@ -203,18 +193,6 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 12,
     fontWeight: '500',
-  },
-  textNoData:{
-    color: '#000',
-    fontSize: 20,
-    fontWeight: '500',
-    textAlign: 'center',
-  },
-  textData:{
-    color: '#000',
-    fontSize: 16,
-    fontWeight: '500',
-    paddingHorizontal: 16,
   }
 
 });

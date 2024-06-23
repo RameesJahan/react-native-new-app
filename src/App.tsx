@@ -1,28 +1,31 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import FoodCard from './components/FoodCard'
-import OrderForm from './components/OrderForm'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Home from './screens/Home'
+import OrderData from './screens/OrderData'
 
-type Props = {}
 
-const App = (props: Props) => {
+export type ParamList = {
+  Home: undefined,
+  OrderData: Order
+}
+
+const Stack = createNativeStackNavigator<ParamList>()
+
+
+
+const App = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <FoodCard />
-        <OrderForm />
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name="OrderData" component={OrderData} options={{ headerTitle: 'Order Details' }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 
 export default App
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  text: {
-    color: '#000'
-  }
-})
+const styles = StyleSheet.create({})
