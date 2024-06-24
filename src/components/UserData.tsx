@@ -1,38 +1,24 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Appwrite from '../Appwrite'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { ParamList } from '../App'
+import { UserContext, UserContextType } from '../contexts/UserContext'
 
 const UserData = () => {
-  const [userData, setUserData] = useState<any>(null)
-  const navigation = useNavigation<NativeStackNavigationProp<ParamList>>()
   
-  useEffect(() => {
-    async function getUserData() {
-      try {
-        const user = await Appwrite.account.get()
-        console.log(user);
-        setUserData(user)
-      } catch (error) {
-        setUserData(null)
-        console.log(error);
-      }
-      
-    }
-
-    getUserData()
-  }, [])
+  const navigation = useNavigation<NativeStackNavigationProp<ParamList>>()
+  const { user, setUser } = useContext(UserContext);
 
   const Logout = () => {
     Appwrite.account.deleteSession('current')
-    setUserData(null)
+    setUser(null)
   }
 
   const handleAction = () => {
     console.log('Action');
-    if (userData) {
+    if (user) {
       Logout()
     } else {
       navigation.navigate('Login')
@@ -41,9 +27,9 @@ const UserData = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Name: {userData? userData.name : 'Not Logged In'}</Text>
+      <Text style={styles.text}>Name: {user? user.name : 'Not Logged In'}</Text>
       <Pressable onPress={handleAction}>
-        <Text style={userData? styles.textActionLogout : styles.textActionLogin }>{userData? 'Logout' : 'Login'}</Text>
+        <Text style={user? styles.textActionLogout : styles.textActionLogin }>{user? 'Logout' : 'Login'}</Text>
       </Pressable>
     </View>
   )

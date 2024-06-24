@@ -1,5 +1,5 @@
 import {Button, ImageBackground, Pressable, StatusBar, StyleSheet, Text, TextInput, View} from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import * as Yup from 'yup';
 import {Formik} from 'formik';
 import Styles from '../styles';
@@ -8,6 +8,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ParamList } from '../App';
 import Appwrite from '../Appwrite';
 import Snackbar from 'react-native-snackbar';
+import { UserContext } from '../contexts/UserContext';
 
 type RegProps = NativeStackScreenProps<ParamList, 'Register'>;
 
@@ -30,6 +31,8 @@ const bgImg = {
 
 const Register = ({ navigation }: RegProps) => {
 
+  const { setUser } = useContext(UserContext);
+
   const handleGotoLogin = () => {
     navigation.replace('Login')
   }
@@ -37,6 +40,12 @@ const Register = ({ navigation }: RegProps) => {
   const register = ({ name, email, password }: FormValues) => {
     Appwrite.account.create(Appwrite.ID.unique(), email, password, name).then(() => {
       Appwrite.account.createEmailPasswordSession(email, password).then(() => {
+        Appwrite.account.get().then(_u => {
+          setUser({
+            name: _u.name,
+            email: _u.email
+          })
+        }); 
         Snackbar.show({ text: 'Registered successfully' })
         navigation.popToTop()
       }, (error) => {

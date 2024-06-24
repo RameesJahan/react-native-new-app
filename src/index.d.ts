@@ -5,3 +5,8 @@ interface Order {
   address: string;
   payTypeId: string;
 }
+
+interface User {
+  name: string;
+  email: string;
+}
