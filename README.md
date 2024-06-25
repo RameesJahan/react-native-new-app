@@ -49,5 +49,9 @@ If everything is set up _correctly_, you should see your new app running in your
 
 This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
 
+## Preview
+
+Download and Install this - [**App Preview**](https://github.com/RameesJahan/react-native-new-app/releases/tag/ReactNativeApp)
+
 ## The code is not good?
 If you have any suggestions or want to improve code feel free to make Pull Request.
