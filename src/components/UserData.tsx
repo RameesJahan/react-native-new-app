@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Appwrite from '../Appwrite'
 import { useNavigation } from '@react-navigation/native'
@@ -7,17 +7,18 @@ import { ParamList } from '../App'
 import { UserContext, UserContextType } from '../contexts/UserContext'
 
 const UserData = () => {
-  
+  const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation<NativeStackNavigationProp<ParamList>>()
   const { user, setUser } = useContext(UserContext);
 
-  const Logout = () => {
-    Appwrite.account.deleteSession('current')
+  const Logout = async() => {
+    setIsLoading(true)
+    await Appwrite.account.deleteSession('current')
     setUser(null)
+    setIsLoading(false)
   }
 
   const handleAction = () => {
-    console.log('Action');
     if (user) {
       Logout()
     } else {
@@ -27,7 +28,9 @@ const UserData = () => {
 
   return (
     <View style={styles.container}>
+      
       <Text style={styles.text}>Name: {user? user.name : 'Not Logged In'}</Text>
+      {isLoading && <ActivityIndicator/> }
       <Pressable onPress={handleAction}>
         <Text style={user? styles.textActionLogout : styles.textActionLogin }>{user? 'Logout' : 'Login'}</Text>
       </Pressable>

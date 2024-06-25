@@ -1,5 +1,5 @@
 import {Button, ImageBackground, Pressable, StatusBar, StyleSheet, Text, TextInput, View} from 'react-native';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import * as Yup from 'yup';
 import {Formik} from 'formik';
 import Styles from '../styles';
@@ -8,6 +8,7 @@ import { ParamList } from '../App';
 import Appwrite from '../Appwrite';
 import Snackbar from 'react-native-snackbar';
 import { UserContext } from '../contexts/UserContext';
+import Loading from '../components/Loading';
 
 type LoginProps = NativeStackScreenProps<ParamList, 'Login'>;
 
@@ -27,6 +28,8 @@ const bgImg = {
 
 const Login = ({ navigation }: LoginProps) => {
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const { setUser } = useContext(UserContext);
 
   const handleGotoRegister = () => {
@@ -34,6 +37,7 @@ const Login = ({ navigation }: LoginProps) => {
   }
 
   const Login = ({ email, password }: FormValues) => {
+    setIsLoading(true)
     Appwrite.account.createEmailPasswordSession(email, password).then((res) => {
       if(res){
         Appwrite.account.get().then(_u => {
@@ -44,9 +48,11 @@ const Login = ({ navigation }: LoginProps) => {
         }); 
       }
       Snackbar.show({ text: 'Logged in successfully' })
+      setIsLoading(false)
       navigation.popToTop()
     }, (error) => {
       Snackbar.show({ text: error.message })
+      setIsLoading(false)
     })
   }
 
@@ -54,6 +60,7 @@ const Login = ({ navigation }: LoginProps) => {
     <View style={styles.container}>
       <StatusBar translucent={true} barStyle={'dark-content'} backgroundColor={'transparent'} />
       <ImageBackground source={bgImg} resizeMode="cover" style={styles.bgImage}>
+        {isLoading && <Loading />}
         <View style={styles.content}>
           <Text style={styles.textHeader}>Welcome Back!</Text>
           <Text style={styles.textSubHeader}>Enter your details</Text>

@@ -1,5 +1,5 @@
 import {Button, ImageBackground, Pressable, StatusBar, StyleSheet, Text, TextInput, View} from 'react-native';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import * as Yup from 'yup';
 import {Formik} from 'formik';
 import Styles from '../styles';
@@ -9,6 +9,7 @@ import { ParamList } from '../App';
 import Appwrite from '../Appwrite';
 import Snackbar from 'react-native-snackbar';
 import { UserContext } from '../contexts/UserContext';
+import Loading from '../components/Loading';
 
 type RegProps = NativeStackScreenProps<ParamList, 'Register'>;
 
@@ -31,6 +32,8 @@ const bgImg = {
 
 const Register = ({ navigation }: RegProps) => {
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const { setUser } = useContext(UserContext);
 
   const handleGotoLogin = () => {
@@ -38,6 +41,7 @@ const Register = ({ navigation }: RegProps) => {
   }
 
   const register = ({ name, email, password }: FormValues) => {
+    setIsLoading(true)
     Appwrite.account.create(Appwrite.ID.unique(), email, password, name).then(() => {
       Appwrite.account.createEmailPasswordSession(email, password).then(() => {
         Appwrite.account.get().then(_u => {
@@ -47,12 +51,15 @@ const Register = ({ navigation }: RegProps) => {
           })
         }); 
         Snackbar.show({ text: 'Registered successfully' })
+        setIsLoading(false)
         navigation.popToTop()
       }, (error) => {
         Snackbar.show({ text: error.message })
+        setIsLoading(false)
       })
     }, (error) => {
       Snackbar.show({ text: error.message })
+      setIsLoading(false)
     })
   }
 
@@ -60,6 +67,7 @@ const Register = ({ navigation }: RegProps) => {
     <View style={styles.container}>
       <StatusBar translucent={true} barStyle={'dark-content'} backgroundColor={'transparent'} />
       <ImageBackground source={bgImg} resizeMode="cover" style={styles.bgImage}>
+        {isLoading && <Loading />}
         <View style={styles.content}>
           <Text style={styles.textHeader}>Welcome !</Text>
           <Text style={styles.textSubHeader}>Enter your details</Text>
