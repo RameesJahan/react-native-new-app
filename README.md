@@ -51,7 +51,10 @@ This is one way to run your app — you can also run it directly from within And
 
 ## Preview
 
-Download and Install this - [**App Preview**](https://github.com/RameesJahan/react-native-new-app/releases/tag/ReactNativeApp)
+Download and Install app-release.apk from here -> [**App Preview**](https://github.com/RameesJahan/react-native-new-app/releases/tag/ReactNativeApp)
+
+> [!NOTE] 
+> If there is Play Protect Alert then click on Learn more -> Install Anyway 
 
 ## The code is not good?
 If you have any suggestions or want to improve code feel free to make Pull Request.
