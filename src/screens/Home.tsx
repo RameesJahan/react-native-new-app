@@ -3,6 +3,7 @@ import React, { PropsWithChildren } from 'react'
 import FoodCard from '../components/FoodCard'
 import OrderForm from '../components/OrderForm'
 import UserData from '../components/UserData'
+import Carousel from '../components/Carousel'
 
 type HomeProps = PropsWithChildren<{}>
 
@@ -13,6 +14,7 @@ const Home = (props: HomeProps) => {
         <UserData />
         <FoodCard />
         <OrderForm />
+        <Carousel />
       </ScrollView>
     </View>
   )
